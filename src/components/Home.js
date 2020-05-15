@@ -5,57 +5,56 @@ import { connect } from 'react-redux';
 import { fetchMovies, setLoading } from '../actions/fetchActions';
 
 import Movie from './Movie';
-export const API_URL = "http://www.omdbapi.com/?apikey=dfe6d885";
+export const API_URL = 'http://www.omdbapi.com/?apikey=dfe6d885';
 
-function Home({fetchMovies,setLoading, movies}) {
+function Home({ fetchMovies, setLoading, movies }) {
+    const [searchText, setSearchText] = React.useState('');
 
-  const [searchText, setSearchText] = React.useState('');
+    const handleOnChange = (event) => {
+        const value = event.target.value;
+        setSearchText(value);
+    };
 
-  const handleOnChange = (event) => {
-    const value = event.target.value;
-    setSearchText(value)
-  };
+    const handleSearch = (event) => {
+        event.preventDefault();
+        fetchMovies(searchText);
+        setLoading();
+    };
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    fetchMovies(searchText)
-    setLoading()
-  }
+    return (
+        <div className="App">
+            <StyledMain>
+                <SearchContainer>
+                    <h1>Search for a movie, TV series ..</h1>
 
-  return (
-      
-      <div className="App">
+                    <StyledForm>
+                        <StyledSearchInput
+                            placeholder="Search Movies, TV Series ..."
+                            type="text"
+                            onChange={handleOnChange}
+                            value={searchText}
+                        />
 
-      <StyledMain>
+                        <StyledButton onClick={handleSearch}>
+                            Search
+                        </StyledButton>
+                    </StyledForm>
+                </SearchContainer>
 
-       <SearchContainer>
-
-          <h1>Search for a movie, TV series ..</h1>
-
-          <StyledForm >
-
-              <StyledSearchInput placeholder="Search Movies, TV Series ..." type="text" onChange={handleOnChange} value={searchText}/>
-
-              <StyledButton onClick={handleSearch} >Search</StyledButton>
-
-        </StyledForm>
-
-       </SearchContainer>
-       
-       <StyledMovies>
-         {
-           movies.map( (item, index) => {
-             return <StyledMovie key={index}>  <Movie {...item} /> </StyledMovie>
-           })
-         }
-       </StyledMovies>
-      </StyledMain>
-    </div>
-    
-  );
+                <StyledMovies>
+                    {movies.map((item, index) => {
+                        return (
+                            <StyledMovie key={index}>
+                                {' '}
+                                <Movie {...item} />{' '}
+                            </StyledMovie>
+                        );
+                    })}
+                </StyledMovies>
+            </StyledMain>
+        </div>
+    );
 }
-
-
 
 const StyledMovies = styled.div`
     display: flex;
@@ -64,18 +63,17 @@ const StyledMovies = styled.div`
 `;
 
 const StyledMovie = styled.div`
-  width: 230px;
-  height: 450px;
-  margin-bottom: 20px
-`
-
+    width: 230px;
+    height: 450px;
+    margin-bottom: 20px;
+`;
 
 const SearchContainer = styled.div`
     width: 550px;
     margin: 3rem auto 2rem;
     padding: 1rem;
     background: aqua;
-`
+`;
 
 const StyledSearchInput = styled.input`
     border: 1px solid #ced4da;
@@ -89,18 +87,17 @@ const StyledSearchInput = styled.input`
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-`
+`;
 
 const StyledMain = styled.main`
-  margin: 100px auto;
-`
+    margin: 100px auto;
+`;
 
 const StyledForm = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-`
-
+`;
 
 const StyledButton = styled.button`
     width: 67px;
@@ -113,10 +110,10 @@ const StyledButton = styled.button`
     line-height: 1.5;
     border: 1px solid transparent;
     border-radius: 4px;
-`
+`;
 
-const mapStateToProps = state => ({
-  movies: state.app.movies
+const mapStateToProps = (state) => ({
+    movies: state.app.movies,
 });
 
-export default connect(mapStateToProps, {fetchMovies, setLoading})(Home);
+export default connect(mapStateToProps, { fetchMovies, setLoading })(Home);

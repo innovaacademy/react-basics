@@ -6,32 +6,36 @@ const initialState = {
     movies: [],
     loading: false,
     movie: {
-        Title: '', Poster: '', Actors: '', Awards: '', Realeased: ''
+        Title: '',
+        Poster: '',
+        Actors: '',
+        Awards: '',
+        Realeased: '',
     },
-}
+};
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
     switch (action.type) {
         case FETCH_MOVIES:
             return {
                 ...state,
                 movies: action.payload,
                 searchText: action.searchText,
-                loading: false
-            } 
+                loading: false,
+            };
         case FETCH_MOVIE:
             return {
                 ...state,
                 movie: action.payload.data,
                 id: action.payload.id,
-                loading: false
-            }    
+                loading: false,
+            };
         case LOADING:
             return {
                 ...state,
-                loading: true
-            }
+                loading: true,
+            };
         default:
-            return state
+            return state;
     }
 }

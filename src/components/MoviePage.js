@@ -1,22 +1,24 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
 import {
-    Card, CardImg, CardBody,
-    CardTitle, CardText, Spinner
-  } from 'reactstrap';
+    Card,
+    CardImg,
+    CardBody,
+    CardTitle,
+    CardText,
+    Spinner,
+} from 'reactstrap';
 import { connect } from 'react-redux';
-import { useParams }  from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchMovie, setLoading } from '../actions/fetchActions';
 
-const MoviePage = ({ movie, fetchMovie,setLoading, isLoading}) => {
+const MoviePage = ({ movie, fetchMovie, setLoading, isLoading }) => {
     let { id } = useParams();
 
     React.useEffect(() => {
-
         fetchMovie(id);
         setLoading();
-
-    }, [fetchMovie, id, setLoading])
+    }, [fetchMovie, id, setLoading]);
 
     const { Title, Poster, Actors, Awards, Realeased } = movie;
 
@@ -25,31 +27,32 @@ const MoviePage = ({ movie, fetchMovie,setLoading, isLoading}) => {
             <StyledSpinner>
                 <Spinner color="primary" />
             </StyledSpinner>
-        )
+        );
     }
-        
 
     return (
         <StyledMoviePage>
-
-            
-                    <StyledCardContainer>
-                        <Card style={{height: '100%'}}>
-                                    <CardImg top width="100%" height="500px" src={Poster} alt={Title} />
-                                    <CardBody style={{ padding: "0.25px" }}>
-                                        <CardTitle>{Title}</CardTitle>
-                                        <CardText>{Actors}</CardText>
-                                        <CardText>{Awards}</CardText>
-                                        <CardText>{Realeased}</CardText>
-                                    </CardBody>
-                                </Card>
-                    </StyledCardContainer>
-                )
-            
-            
+            <StyledCardContainer>
+                <Card style={{ height: '100%' }}>
+                    <CardImg
+                        top
+                        width="100%"
+                        height="500px"
+                        src={Poster}
+                        alt={Title}
+                    />
+                    <CardBody style={{ padding: '0.25px' }}>
+                        <CardTitle>{Title}</CardTitle>
+                        <CardText>{Actors}</CardText>
+                        <CardText>{Awards}</CardText>
+                        <CardText>{Realeased}</CardText>
+                    </CardBody>
+                </Card>
+            </StyledCardContainer>
+            )
         </StyledMoviePage>
-    )
-}
+    );
+};
 
 const StyledMoviePage = styled.div`
     position: fixed;
@@ -75,12 +78,11 @@ const StyledSpinner = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`
+`;
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     movie: state.app.movie,
-    isLoading: state.app.loading
-})
+    isLoading: state.app.loading,
+});
 
-
-export default connect(mapStateToProps, {fetchMovie, setLoading})(MoviePage);
+export default connect(mapStateToProps, { fetchMovie, setLoading })(MoviePage);
