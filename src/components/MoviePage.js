@@ -4,33 +4,21 @@ import {
     Card, CardImg, CardBody,
     CardTitle, CardText, Spinner
   } from 'reactstrap';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import { useParams }  from 'react-router-dom';
+import { fetchMovie, setLoading } from '../actions/fetchActions';
 
-import {API_URL } from './Home';
-
-const MoviePage = () => {
+const MoviePage = ({ movie, fetchMovie,setLoading, isLoading}) => {
     let { id } = useParams();
-    const [isLoading, setIsLoading] = React.useState(true)
-
-    const [movieDetails, setMovieDetails] = React.useState({});
 
     React.useEffect(() => {
-        
-        const fetchMovie = async () => {
-            axios(API_URL + "&i=" + id).then(
-                ({data}) => {
-          
-                  setMovieDetails(data);
-                  setIsLoading(false)
-                }
-        )}
 
-        fetchMovie();
+        fetchMovie(id);
+        setLoading();
 
-    }, [id])
+    }, [fetchMovie, id, setLoading])
 
-    const { Title, Poster, Actors, Awards, Realeased } = movieDetails;
+    const { Title, Poster, Actors, Awards, Realeased } = movie;
 
     if (isLoading) {
         return (
@@ -89,4 +77,10 @@ const StyledSpinner = styled.div`
     justify-content: center;
 `
 
-export default MoviePage
+const mapStateToProps = state => ({
+    movie: state.app.movie,
+    isLoading: state.app.loading
+})
+
+
+export default connect(mapStateToProps, {fetchMovie, setLoading})(MoviePage);

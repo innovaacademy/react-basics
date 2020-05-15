@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { fetchMovies, setLoading } from '../actions/fetchActions';
 
 import Movie from './Movie';
-
 export const API_URL = "http://www.omdbapi.com/?apikey=dfe6d885";
 
-function Home() {
+function Home({fetchMovies,setLoading, movies}) {
 
   const [searchText, setSearchText] = React.useState('');
-  const [moviesList, setMoviesList] = React.useState([]);
 
   const handleOnChange = (event) => {
     const value = event.target.value;
@@ -18,14 +18,8 @@ function Home() {
 
   const handleSearch = (event) => {
     event.preventDefault();
-
-    searchText && axios(API_URL + "&s=" + searchText).then(
-      ({data}) => {
-        const results = data.Search;
-
-        setMoviesList(results);
-      }
-    )
+    fetchMovies(searchText)
+    setLoading()
   }
 
   return (
@@ -50,7 +44,7 @@ function Home() {
        
        <StyledMovies>
          {
-           moviesList.map( (item, index) => {
+           movies.map( (item, index) => {
              return <StyledMovie key={index}>  <Movie {...item} /> </StyledMovie>
            })
          }
@@ -121,4 +115,8 @@ const StyledButton = styled.button`
     border-radius: 4px;
 `
 
-export default Home;
+const mapStateToProps = state => ({
+  movies: state.app.movies
+});
+
+export default connect(mapStateToProps, {fetchMovies, setLoading})(Home);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import Home from './components/Home';
 import MoviePage from './components/MoviePage'
@@ -9,16 +10,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 
-function App() {
+function App({ movie, searchText}) {
 
   return (
     <div>
 
       <Router>
         <StyledNavigation>
+          <div>
+            Last Searched Term: <b>{searchText}</b>
+          </div>
           <StyledTitle>
            <Link to="/">Search Page</Link> 
           </StyledTitle>
+          <div style={{width: '250px'}}>
+            Last Viewed Movie: <b>{movie.Title}</b>
+          </div>
 
         </StyledNavigation>
         <Switch>
@@ -61,10 +68,16 @@ const StyledNavigation = styled.div`
   top: 0;
   z-index: 10;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
+  color: white;
 
 `
 
-export default App;
+const mapStateToProps = state => ({
+  searchText: state.app.searchText,
+  movie: state.app.movie
+})
+
+export default connect(mapStateToProps)(App);
